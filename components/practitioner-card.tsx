@@ -17,7 +17,7 @@ function PinIcon() {
 
 export function PractitionerCard({ practitioner }: { practitioner: Practitioner }) {
   const premium = practitioner.tier === "premium";
-  const base = "relative flex flex-col gap-1.5 rounded-xl p-4 transition-shadow hover:shadow-md";
+  const base = "relative flex h-full flex-col gap-1.5 rounded-xl p-4 transition-shadow hover:shadow-md";
   const style = premium
     ? "border border-violet-200 bg-violet-50 shadow-sm"
     : "border border-zinc-200 bg-white";
