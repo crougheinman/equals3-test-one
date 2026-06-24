@@ -1,6 +1,7 @@
 import type { Practitioner } from "@/lib/types";
 import { TIER_PRICE } from "@/lib/pricing";
 import { Ribbon } from "@/components/ribbon";
+import { Avatar } from "@/components/avatar";
 import { SpecialismTags } from "@/components/specialism-tags";
 
 function PinIcon() {
@@ -17,23 +18,33 @@ function PinIcon() {
 
 export function PractitionerCard({ practitioner }: { practitioner: Practitioner }) {
   const premium = practitioner.tier === "premium";
-  const base = "relative flex h-full flex-col gap-1.5 rounded-xl p-4 transition-shadow hover:shadow-md";
-  const style = premium
-    ? "border border-violet-200 bg-violet-50 shadow-sm"
-    : "border border-zinc-200 bg-white";
 
   return (
-    <article className={`${base} ${style}`}>
+    <article
+      className={`relative flex h-full flex-col overflow-hidden rounded-2xl border shadow-sm transition-shadow hover:shadow-md ${
+        premium ? "border-violet-200 bg-violet-50" : "border-zinc-200 bg-white"
+      }`}
+    >
       {premium && <Ribbon />}
-      <h3 className="pr-16 text-base font-semibold text-zinc-900">{practitioner.name}</h3>
-      <p className="flex items-center gap-1 text-xs text-zinc-500">
-        <PinIcon /> {practitioner.location}
-      </p>
-      <SpecialismTags specialisms={practitioner.specialisms} />
-      <p className="mt-0.5 text-sm">
-        <span className="font-semibold text-violet-700">£{TIER_PRICE[practitioner.tier]}</span>
-        <span className="text-zinc-500"> /month</span>
-      </p>
+
+      {/* Header band */}
+      <div className="h-16 bg-gradient-to-br from-violet-500 to-violet-700" />
+
+      {/* Body */}
+      <div className="flex flex-1 flex-col gap-1.5 px-4 pb-4">
+        <div className="-mt-8">
+          <Avatar name={practitioner.name} />
+        </div>
+        <h3 className="mt-1 text-base font-semibold text-zinc-900">{practitioner.name}</h3>
+        <p className="flex items-center gap-1 text-xs text-zinc-500">
+          <PinIcon /> {practitioner.location}
+        </p>
+        <SpecialismTags specialisms={practitioner.specialisms} />
+        <div className="mt-auto border-t border-violet-100 pt-3">
+          <span className="text-base font-bold text-violet-700">£{TIER_PRICE[practitioner.tier]}</span>
+          <span className="text-xs text-zinc-500"> /month</span>
+        </div>
+      </div>
     </article>
   );
 }
