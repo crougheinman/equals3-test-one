@@ -14,9 +14,12 @@ Built with Next.js 16 (App Router), React 19, Supabase (Postgres), Tailwind v4.
 
 1. **Environment** — `.env.local` (already present here) needs:
    ```
-   NEXT_PUBLIC_SUPABASE_URL=<your-project-url>
+   NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
    ```
+   > Use the **base** project URL — no `/rest/v1/` suffix. The Supabase client
+   > appends the REST path itself; a trailing `/rest/v1/` yields
+   > `Invalid path specified in request URL`.
 
 2. **Database** — open the Supabase **SQL editor** and run [`supabase/seed.sql`](supabase/seed.sql).
    It creates the `practitioner_tier` enum, the `practitioners` table, a public
