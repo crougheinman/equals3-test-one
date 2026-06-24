@@ -47,6 +47,7 @@ Supabase table `practitioners`:
 | specialisms     | text[] not null    | plural — a trainer teaches several |
 | location        | text not null      | UK city / region                   |
 | tier            | practitioner_tier not null | enum, not text+check       |
+| verified        | boolean not null   | `default true`; vetted trust badge |
 | profile_picture | text               | portrait image URL, nullable       |
 | created_at      | timestamptz        | `default now()`                    |
 
@@ -105,8 +106,15 @@ map its domain (coworking spaces) onto ours (trainers).
    the shot's row style, not heavy boxed cards (premium is the exception, below).
 
 **Row content** (maps the shot's card): rounded portrait avatar (left) · name
-(bold) + tier badge pill beside it · location with indigo pin icon · specialism
-tags as light gray icon-chips (the shot's sqft/people/parking chip row).
+(bold) · badges beside the name — gold **★ Featured** (premium only) and
+**✓ Verified** (verified only) · location with indigo pin icon · specialism tags
+as light gray icon-chips (the shot's sqft/people/parking chip row).
+
+**Badges, not "tier":** per brief critique #1/#3 (accepted), the public page never
+shows the word "Standard." Premium surfaces as **Featured** (the value they pay
+for is prominence); the **Verified** badge carries the trust signal the brief
+buried. `tier` stays internal — it drives ranking + the Featured badge, not a
+"you pay less" label.
 
 ## Premium standout
 
@@ -117,8 +125,9 @@ pop — no setting toggle:
 2. **Elevation:** premium rows render as **bordered cards** with an amber/gold
    left accent, a subtle gold-tinted background, and soft shadow — lifted off the
    plain divider-separated standard rows below.
-3. **Badge:** gold `★ Premium` pill beside the name. Standard tier shows a muted
-   gray `Standard` pill (or none).
+3. **Badge:** gold `★ Featured` pill beside the name (premium only). Standard
+   tier shows **no** tier label (critique #1). The `✓ Verified` badge is
+   independent of tier and can appear on either.
 
 Works in light and dark (`dark:` variants).
 
@@ -150,6 +159,9 @@ Many practitioners hold multiple specialisms to exercise the array filter.
 Enough overlap in locations and specialisms that filters return multiple
 results, not one-offs.
 
+**Verified:** most seeded `true` (they're vetted); a few `false` ("pending
+verification") so the `✓ Verified` badge visibly varies in the demo.
+
 **Profile pictures:** seeded with portrait placeholder URLs from a free service
 (e.g. `https://randomuser.me/api/portraits/...` or `https://i.pravatar.cc/...`),
 deterministic per practitioner. No image upload or Supabase Storage.
@@ -173,7 +185,7 @@ Beyond the working page:
    punishes the trainer for the cheaper plan. Premium should win through
    *placement/prominence* (what they pay for), not by branding everyone else as
    second-class. **Proposed change:** Premium → "Featured"; show no "Standard"
-   label. Keep `tier` internally for ranking/billing.
+   label. Keep `tier` internally for ranking/billing. **[ACCEPTED — in build.]**
 2. **"Stand out" is undefined** — the core monetisation mechanic is hand-waved.
    Needs an explicit ranking policy: premium-first, then *rotate within tier* so
    the same names don't always top, then name. If most trainers are Premium the
@@ -181,6 +193,7 @@ Beyond the working page:
 3. **"Vetted" is the trust signal the brief buried.** Trainers are "vetted" but
    the brief asks for no verified indicator while asking to show tier. A
    **Verified** badge is worth more to students than a billing tier.
+   **[ACCEPTED — `verified` field + badge in build.]**
 4. **"Filter by specialism OR location" understates the journey.** Students
    filter by *what* and *where* — both. Built both.
 5. **Thin decision surface.** name + specialism + location + tier can't support
@@ -203,6 +216,9 @@ Beyond the working page:
 
 - `npm run build` succeeds.
 - Page renders the seeded practitioners, premium first and visually distinct.
+- Premium shows a gold `★ Featured` badge; **no** card shows "Standard".
+- `✓ Verified` badge appears on verified rows and is absent on the few unverified
+  seeds.
 - Specialism filter narrows to matching practitioners; location filter likewise;
   combined filters AND correctly; "All"/"All" shows everything.
 - Empty-match combination shows the no-results message.
