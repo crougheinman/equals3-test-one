@@ -154,6 +154,44 @@ results, not one-offs.
 (e.g. `https://randomuser.me/api/portraits/...` or `https://i.pravatar.cc/...`),
 deterministic per practitioner. No image upload or Supabase Storage.
 
+## Deliverables
+
+Beyond the working page:
+
+- **`README.md`** (replaces the create-next-app boilerplate) covering:
+  1. **How to run** — env vars, run `supabase/seed.sql` in the Supabase SQL
+     editor, `npm install`, `npm run dev`.
+  2. **Progress report** — what was built, what was left out, what's next.
+  3. **Brief critique** — where the brief was unclear / underspecified and what
+     I'd change. Direct. Seeded from "Brief gaps" below.
+
+## Brief gaps / critique (README §3 seed)
+
+1. **Showing `tier` to students is a business mistake.** Tier is the trainer's
+   *billing plan*, not a student-facing quality signal. Publicly labelling a
+   trainer "Standard" tells students "pays less → lesser" — unfair, and it
+   punishes the trainer for the cheaper plan. Premium should win through
+   *placement/prominence* (what they pay for), not by branding everyone else as
+   second-class. **Proposed change:** Premium → "Featured"; show no "Standard"
+   label. Keep `tier` internally for ranking/billing.
+2. **"Stand out" is undefined** — the core monetisation mechanic is hand-waved.
+   Needs an explicit ranking policy: premium-first, then *rotate within tier* so
+   the same names don't always top, then name. If most trainers are Premium the
+   differentiation collapses — needs a stated cap or acceptance.
+3. **"Vetted" is the trust signal the brief buried.** Trainers are "vetted" but
+   the brief asks for no verified indicator while asking to show tier. A
+   **Verified** badge is worth more to students than a billing tier.
+4. **"Filter by specialism OR location" understates the journey.** Students
+   filter by *what* and *where* — both. Built both.
+5. **Thin decision surface.** name + specialism + location + tier can't support
+   "discover and choose a trainer." Real fields: bio, accreditation body
+   (JCCP / Save Face), experience, course info/dates, reviews. Seeded thin for
+   now; flagged for the data model.
+6. **No funnel end.** Goal is trainers "discovered by students," but list+filter
+   has no contact/enquiry or detail step. What's the conversion action?
+7. **Location granularity undefined** (city vs region vs radius; online vs
+   in-person). Exact-string match is brittle. Using city strings for now.
+
 ## Out of scope (YAGNI)
 
 - Auth / login, practitioner sign-up, subscription/billing flow.
