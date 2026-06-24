@@ -22,7 +22,7 @@ Built with Next.js 16 (App Router), React 19, Supabase (Postgres), Tailwind v4.
    > `Invalid path specified in request URL`.
 
 2. **Database** — open the Supabase **SQL editor** and run [`supabase/seed.sql`](supabase/seed.sql).
-   It creates the `practitioner_tier` enum, the `practitioners` table, a public
+   It creates the `practitioner_tier` enum, the `equals` table, a public
    read-only RLS policy, and inserts 30 seed trainers. (Re-running requires
    dropping the table/type first.)
 

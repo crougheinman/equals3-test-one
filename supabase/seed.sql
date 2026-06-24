@@ -1,9 +1,16 @@
 -- Aesthetic Training Hub — practitioner directory schema + seed.
 -- Run in the Supabase SQL editor.
+--
+-- WARNING: this DROPS and recreates the `equals` table. Safe if it is empty /
+-- a placeholder (as it was at build time). If you have real data in `equals`,
+-- back it up first.
+
+drop table if exists equals cascade;
+drop type if exists practitioner_tier cascade;
 
 create type practitioner_tier as enum ('standard', 'premium');
 
-create table practitioners (
+create table equals (
   id bigint generated always as identity primary key,
   name text not null,
   specialisms text[] not null,
@@ -14,14 +21,14 @@ create table practitioners (
   created_at timestamptz not null default now()
 );
 
-alter table practitioners enable row level security;
+alter table equals enable row level security;
 
-create policy "Public can read practitioners"
-  on practitioners for select
+create policy "Public can read equals"
+  on equals for select
   to anon
   using (true);
 
-insert into practitioners (name, specialisms, location, tier, verified, profile_picture) values
+insert into equals (name, specialisms, location, tier, verified, profile_picture) values
   ('Dr. Amelia Hart', '{Botox / Anti-wrinkle,Dermal Fillers}', 'London', 'premium', true, 'https://randomuser.me/api/portraits/women/11.jpg'),
   ('James Okafor', '{Dermal Fillers,Lip Enhancement}', 'Manchester', 'premium', true, 'https://randomuser.me/api/portraits/men/12.jpg'),
   ('Priya Nair', '{Skin Peels,Microneedling}', 'Birmingham', 'premium', true, 'https://randomuser.me/api/portraits/women/13.jpg'),
