@@ -1,34 +1,41 @@
+import { FilterSelect } from "@/components/filter-select";
+
 export function FilterBar({
   specialisms,
-  value,
-  onChange,
+  specialism,
+  onSpecialismChange,
+  locations,
+  location,
+  onLocationChange,
   onReset,
 }: {
   specialisms: string[];
-  value: string;
-  onChange: (v: string) => void;
+  specialism: string;
+  onSpecialismChange: (v: string) => void;
+  locations: string[];
+  location: string;
+  onLocationChange: (v: string) => void;
   onReset: () => void;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900">
-      <label className="flex flex-col gap-0.5">
-        <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">Specialism</span>
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-white py-1.5 pl-2 pr-6 text-sm font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-        >
-          <option value="all">All specialisms</option>
-          {specialisms.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
-      </label>
+    <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-3 shadow-sm">
+      <FilterSelect
+        label="Specialism"
+        value={specialism}
+        onChange={onSpecialismChange}
+        options={specialisms}
+        allLabel="All specialisms"
+      />
+      <FilterSelect
+        label="Location"
+        value={location}
+        onChange={onLocationChange}
+        options={locations}
+        allLabel="All locations"
+      />
       <button
         onClick={onReset}
-        className="ml-auto text-sm font-medium text-violet-600 hover:underline dark:text-violet-400"
+        className="ml-auto text-sm font-medium text-violet-600 transition-colors hover:underline"
       >
         Reset filters
       </button>

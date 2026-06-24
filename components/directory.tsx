@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Practitioner } from "@/lib/types";
 import { filterPractitioners, uniqueSpecialisms, uniqueLocations } from "@/lib/filter";
 import { FilterBar } from "@/components/filter-bar";
-import { LocationChips } from "@/components/location-chips";
 import { PractitionerList } from "@/components/practitioner-list";
 import { Pagination } from "@/components/pagination";
 
@@ -46,13 +45,20 @@ export function Directory({ practitioners }: { practitioners: Practitioner[] }) 
 
   return (
     <div ref={topRef} className="flex scroll-mt-6 flex-col gap-6">
-      <FilterBar specialisms={specialisms} value={specialism} onChange={setSpecialism} onReset={reset} />
+      <FilterBar
+        specialisms={specialisms}
+        specialism={specialism}
+        onSpecialismChange={setSpecialism}
+        locations={locations}
+        location={location}
+        onLocationChange={setLocation}
+        onReset={reset}
+      />
       <p className="text-sm text-zinc-500">
         {total === 0
           ? "No trainers found"
           : `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, total)} of ${total} trainer${total === 1 ? "" : "s"}`}
       </p>
-      <LocationChips locations={locations} value={location} onChange={setLocation} />
       <PractitionerList key={`${specialism}|${location}|${currentPage}`} practitioners={pageItems} />
       <Pagination page={currentPage} totalPages={totalPages} onChange={goToPage} />
     </div>
