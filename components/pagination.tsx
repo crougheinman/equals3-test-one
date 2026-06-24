@@ -25,7 +25,7 @@ export function Pagination({
           key={n}
           onClick={() => onChange(n)}
           aria-current={n === page ? "page" : undefined}
-          className={`${btn} ${n === page ? "border-indigo-600 bg-indigo-600 text-white" : idle}`}
+          className={`${btn} ${n === page ? "border-violet-600 bg-violet-600 text-white" : idle}`}
         >
           {n}
         </button>

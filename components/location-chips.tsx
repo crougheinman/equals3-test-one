@@ -19,7 +19,7 @@ export function LocationChips({
             className={
               "rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors " +
               (active
-                ? "border-indigo-200 bg-indigo-50 text-indigo-700 dark:border-indigo-400/30 dark:bg-indigo-400/15 dark:text-indigo-300"
+                ? "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-400/30 dark:bg-violet-400/15 dark:text-violet-300"
                 : "border-zinc-200 text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800")
             }
           >

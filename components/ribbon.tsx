@@ -1,13 +1,9 @@
-// Hanging red "Premium" ribbon — pinned to the top-right of a card, hangs down
-// with a swallowtail (notched) tail.
+// Violet "Premium" strip hanging from the top-right corner of a card, with a
+// pointed tail and a soft shadow so it pops off the card.
 export function Ribbon() {
   return (
-    <div className="absolute -top-2 right-6 z-10 select-none">
-      {/* little hanger knob */}
-      <div className="mx-auto h-2 w-2 rounded-full bg-red-700 shadow-sm" />
-      <div className="-mt-1 bg-red-600 px-3 pb-4 pt-2 text-[11px] font-bold uppercase tracking-wider text-white shadow-md [clip-path:polygon(0_0,100%_0,100%_100%,50%_76%,0_100%)]">
-        Premium
-      </div>
+    <div className="absolute -top-1 right-4 z-10 select-none bg-violet-600 px-2.5 pb-2.5 pt-1.5 text-[10px] font-bold uppercase tracking-wider text-white drop-shadow-lg [clip-path:polygon(0_0,100%_0,100%_100%,50%_75%,0_100%)]">
+      Premium
     </div>
   );
 }

@@ -28,7 +28,7 @@ export function FilterBar({
       </label>
       <button
         onClick={onReset}
-        className="ml-auto text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
+        className="ml-auto text-sm font-medium text-violet-600 hover:underline dark:text-violet-400"
       >
         Reset filters
       </button>
