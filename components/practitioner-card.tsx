@@ -21,17 +21,21 @@ export function PractitionerCard({ practitioner }: { practitioner: Practitioner 
 
   return (
     <article
-      className={`group relative flex h-full flex-col rounded-2xl border shadow-sm transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl ${
+      className={`group relative flex h-full flex-col rounded-2xl border transition-all duration-300 ease-out hover:-translate-y-1.5 ${
         premium
-          ? "border-violet-200 bg-violet-50 hover:border-violet-300 hover:shadow-violet-300/40"
-          : "border-zinc-200 bg-white hover:border-violet-200 hover:shadow-violet-200/40"
+          ? "border-violet-300 bg-violet-50 ring-2 ring-violet-300/60 shadow-lg shadow-violet-300/40 hover:border-violet-400 hover:shadow-xl hover:shadow-violet-400/50"
+          : "border-zinc-200 bg-white shadow-sm hover:border-violet-200 hover:shadow-xl hover:shadow-violet-200/40"
       }`}
     >
       {premium && <Ribbon />}
 
-      {/* Header band */}
+      {/* Header band — vivid violet for premium, muted for standard */}
       <div className="h-16 overflow-hidden rounded-t-2xl">
-        <div className="h-full w-full bg-gradient-to-br from-violet-500 to-violet-700 transition-transform duration-500 ease-out group-hover:scale-105" />
+        <div
+          className={`h-full w-full bg-gradient-to-br transition-transform duration-500 ease-out group-hover:scale-105 ${
+            premium ? "from-violet-500 to-violet-700" : "from-violet-200 to-violet-300"
+          }`}
+        />
       </div>
 
       {/* Body */}
