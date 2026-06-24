@@ -8,7 +8,7 @@ import { LocationChips } from "@/components/location-chips";
 import { PractitionerList } from "@/components/practitioner-list";
 import { Pagination } from "@/components/pagination";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 12;
 
 export function Directory({ practitioners }: { practitioners: Practitioner[] }) {
   const [specialism, setSpecialism] = useState("all");
