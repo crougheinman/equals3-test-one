@@ -47,16 +47,11 @@ export function Directory({ practitioners }: { practitioners: Practitioner[] }) 
   return (
     <div ref={topRef} className="flex scroll-mt-6 flex-col gap-6">
       <FilterBar specialisms={specialisms} value={specialism} onChange={setSpecialism} onReset={reset} />
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-50">
-          Find an aesthetics trainer
-        </h1>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          {total === 0
-            ? "No trainers found"
-            : `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, total)} of ${total} trainer${total === 1 ? "" : "s"}`}
-        </p>
-      </div>
+      <p className="text-sm text-zinc-500">
+        {total === 0
+          ? "No trainers found"
+          : `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, total)} of ${total} trainer${total === 1 ? "" : "s"}`}
+      </p>
       <LocationChips locations={locations} value={location} onChange={setLocation} />
       <PractitionerList key={`${specialism}|${location}|${currentPage}`} practitioners={pageItems} />
       <Pagination page={currentPage} totalPages={totalPages} onChange={goToPage} />
