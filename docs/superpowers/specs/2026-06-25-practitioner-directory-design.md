@@ -28,16 +28,23 @@ so the page is populated.
 
 ## Data model
 
+Postgres enum for tier:
+
+```sql
+create type practitioner_tier as enum ('standard', 'premium');
+```
+
 Supabase table `practitioners`:
 
-| column      | type               | notes                                  |
-|-------------|--------------------|----------------------------------------|
-| id          | bigint identity PK |                                        |
-| name        | text not null      |                                        |
-| specialisms | text[] not null    | plural — a trainer teaches several      |
-| location    | text not null      | UK city / region                       |
-| tier        | text not null      | `check (tier in ('standard','premium'))` |
-| created_at  | timestamptz        | `default now()`                        |
+| column          | type               | notes                              |
+|-----------------|--------------------|------------------------------------|
+| id              | bigint identity PK |                                    |
+| name            | text not null      |                                    |
+| specialisms     | text[] not null    | plural — a trainer teaches several |
+| location        | text not null      | UK city / region                   |
+| tier            | practitioner_tier not null | enum, not text+check       |
+| profile_picture | text               | portrait image URL, nullable       |
+| created_at      | timestamptz        | `default now()`                    |
 
 **RLS:** enabled. Single policy: anon `SELECT` only. Public read-only directory;
 no writes from the client.
@@ -57,8 +64,9 @@ supabase/seed.sql       Table DDL + RLS policy + INSERTs. User runs it in the
 ```
 
 **Data flow:** request → server component queries Supabase (`select *`,
-`.order('tier', { ascending: false })` so `premium` > `standard` alphabetically
-puts premium first, then `.order('name')`) → rows handed to client component →
+`.order('tier', { ascending: false })` — enum sorts by declaration order
+(`standard`=1, `premium`=2), so descending puts premium first — then
+`.order('name')`) → rows handed to client component →
 user picks filters → client filters the array → grid re-renders. No further
 network calls after first load.
 
@@ -73,6 +81,12 @@ Three reinforcing signals, no setting toggle:
 
 Works in light and dark (Tailwind `dark:` variants).
 
+**Card content (all tiers):** profile picture, name, location, specialism tags,
+tier. Picture renders from `profile_picture`; if null or it fails to load, fall
+back to a neutral avatar showing the practitioner's initials. Plain `<img>`
+with an `onError` handler (client component) — avoids `next/image`
+`remotePatterns` config for the placeholder host.
+
 ## Filtering
 
 - Two native `<select>` controls: **Specialism**, **Location**. Each starts at
@@ -86,11 +100,18 @@ Works in light and dark (Tailwind `dark:` variants).
 
 ## Seed data
 
-8–10 practitioners in `supabase/seed.sql`. Mixed tiers (both Standard and
-Premium represented), varied UK locations (e.g. London, Manchester, Leeds,
-Glasgow, Bristol), varied specialisms (e.g. Botox / Anti-wrinkle, Dermal
-Fillers, Skin Peels, Microneedling, Lip Enhancement, PRP). Some practitioners
-hold multiple specialisms to exercise the array filter.
+~30 practitioners in `supabase/seed.sql`. Mixed tiers (both Standard and Premium
+well represented), varied UK locations (e.g. London, Manchester, Leeds, Glasgow,
+Bristol, Birmingham, Edinburgh, Cardiff, Liverpool, Newcastle), varied
+specialisms (e.g. Botox / Anti-wrinkle, Dermal Fillers, Skin Peels,
+Microneedling, Lip Enhancement, PRP, Chemical Peels, Profhilo, Thread Lifts).
+Many practitioners hold multiple specialisms to exercise the array filter.
+Enough overlap in locations and specialisms that filters return multiple
+results, not one-offs.
+
+**Profile pictures:** seeded with portrait placeholder URLs from a free service
+(e.g. `https://randomuser.me/api/portraits/...` or `https://i.pravatar.cc/...`),
+deterministic per practitioner. No image upload or Supabase Storage.
 
 ## Out of scope (YAGNI)
 
