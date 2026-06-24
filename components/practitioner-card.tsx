@@ -1,4 +1,5 @@
 import type { Practitioner } from "@/lib/types";
+import { TIER_PRICE } from "@/lib/pricing";
 import { Ribbon } from "@/components/ribbon";
 import { SpecialismTags } from "@/components/specialism-tags";
 
@@ -29,6 +30,10 @@ export function PractitionerCard({ practitioner }: { practitioner: Practitioner 
         <PinIcon /> {practitioner.location}
       </p>
       <SpecialismTags specialisms={practitioner.specialisms} />
+      <p className="mt-1 text-sm">
+        <span className="font-semibold text-zinc-900 dark:text-zinc-50">£{TIER_PRICE[practitioner.tier]}</span>
+        <span className="text-zinc-500 dark:text-zinc-400"> /month</span>
+      </p>
     </article>
   );
 }
