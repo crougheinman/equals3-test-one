@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Let the browser theme native controls (e.g. <select> option lists) to match
+     light/dark, so dropdown options keep contrast in dark mode. */
+  color-scheme: light dark;
 }
 
 @theme inline {

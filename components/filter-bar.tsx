@@ -16,7 +16,7 @@ export function FilterBar({
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-transparent py-1.5 pl-2 pr-6 text-sm font-medium text-zinc-800 dark:border-zinc-700 dark:text-zinc-100"
+          className="rounded-lg border border-zinc-200 bg-white py-1.5 pl-2 pr-6 text-sm font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
         >
           <option value="all">All specialisms</option>
           {specialisms.map((s) => (
