@@ -21,7 +21,7 @@ export function PractitionerCard({ practitioner }: { practitioner: Practitioner 
 
   return (
     <article
-      className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border shadow-sm transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl ${
+      className={`group relative flex h-full flex-col rounded-2xl border shadow-sm transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl ${
         premium
           ? "border-violet-200 bg-violet-50 hover:border-violet-300 hover:shadow-violet-300/40"
           : "border-zinc-200 bg-white hover:border-violet-200 hover:shadow-violet-200/40"
@@ -30,7 +30,7 @@ export function PractitionerCard({ practitioner }: { practitioner: Practitioner 
       {premium && <Ribbon />}
 
       {/* Header band */}
-      <div className="h-16 overflow-hidden">
+      <div className="h-16 overflow-hidden rounded-t-2xl">
         <div className="h-full w-full bg-gradient-to-br from-violet-500 to-violet-700 transition-transform duration-500 ease-out group-hover:scale-105" />
       </div>
 
