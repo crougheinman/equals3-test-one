@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
+/* Force light mode: gate the dark: variant behind a .dark class we never add,
+   so prefers-color-scheme: dark no longer triggers any dark: utilities. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  /* Let the browser theme native controls (e.g. <select> option lists) to match
-     light/dark, so dropdown options keep contrast in dark mode. */
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -13,13 +15,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
