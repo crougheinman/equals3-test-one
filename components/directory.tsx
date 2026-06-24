@@ -58,7 +58,7 @@ export function Directory({ practitioners }: { practitioners: Practitioner[] }) 
         </p>
       </div>
       <LocationChips locations={locations} value={location} onChange={setLocation} />
-      <PractitionerList practitioners={pageItems} />
+      <PractitionerList key={`${specialism}|${location}|${currentPage}`} practitioners={pageItems} />
       <Pagination page={currentPage} totalPages={totalPages} onChange={goToPage} />
     </div>
   );

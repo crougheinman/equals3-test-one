@@ -11,8 +11,10 @@ export function PractitionerList({ practitioners }: { practitioners: Practitione
   }
   return (
     <div className="flex flex-col gap-4">
-      {practitioners.map((p) => (
-        <PractitionerCard key={p.id} practitioner={p} />
+      {practitioners.map((p, i) => (
+        <div key={p.id} className="card-enter" style={{ animationDelay: `${i * 40}ms` }}>
+          <PractitionerCard practitioner={p} />
+        </div>
       ))}
     </div>
   );
