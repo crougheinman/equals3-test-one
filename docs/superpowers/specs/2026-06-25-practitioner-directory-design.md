@@ -19,12 +19,16 @@ so the page is populated.
 - **Filter:** both specialism and location, combinable (AND).
 - **Filter mechanism:** fetch-once on the server, filter client-side. Dataset is
   small (dozens), so instant in-browser filtering beats per-change round-trips.
-- **Drop Drizzle:** remove `drizzle-orm`, `drizzle-kit`, `postgres`,
-  `lib/db.ts`, `lib/schema.ts`. Supabase client covers DB access; two stacks is
-  dead weight.
+- **Drop Drizzle:** commit `4b3a8a7` (Greg Peters) added a conflicting Drizzle
+  integration. Per decision, remove it: `drizzle-orm`, `drizzle-kit`, `postgres`
+  deps + `lib/db.ts`, `lib/schema.ts`, `scripts/seed.ts`. Supabase client covers
+  DB access; two stacks is dead weight. Removal via a new (non-history-rewriting)
+  commit.
 - **No new dependencies.** Tailwind v4 already present. Native `<select>` for
-  filters — no combobox library.
+  the specialism filter, plain buttons for location chips — no combobox library.
 - **Route:** directory replaces the boilerplate landing at `/`.
+- **Visual reference:** the "Office Space Finder / SpaceConnect" Dribbble shot
+  (listing-page UI). Adopt its language, not its domain — see Visual design.
 
 ## Data model
 
@@ -56,8 +60,8 @@ app/page.tsx            Server Component. Fetches all practitioners via Supabase
                         anon client, ordered premium-first then name. Passes
                         rows to DirectoryClient.
 app/directory-client.tsx  Client Component. Holds filter state (specialism,
-                        location). Derives dropdown options from the rows.
-                        Filters in-memory, renders the card grid.
+                        location). Derives filter options from the rows.
+                        Filters in-memory, renders the listing rows.
 lib/supabase.ts         Creates the Supabase client from the public env vars.
 supabase/seed.sql       Table DDL + RLS policy + INSERTs. User runs it in the
                         Supabase SQL editor.
@@ -70,31 +74,68 @@ supabase/seed.sql       Table DDL + RLS policy + INSERTs. User runs it in the
 user picks filters → client filters the array → grid re-renders. No further
 network calls after first load.
 
+## Visual design
+
+Inspired by the SpaceConnect listing-page shot. Take its layout and palette,
+map its domain (coworking spaces) onto ours (trainers).
+
+**Palette / tokens**
+- Primary: indigo-600 (`#4f46e5`) — wordmark, active chips, links, location pin,
+  primary buttons.
+- Warm accent: amber/gold — reserved for the **Premium** tier badge + premium
+  card treatment (the shot uses orange for its category pill; we repurpose it for
+  tier).
+- Text: near-black headings, gray-500/600 body. Surfaces: white cards on a
+  light gray (`zinc-50`) page, `gray-200` borders, rounded-xl, generous
+  whitespace. Light + dark via Tailwind `dark:`.
+
+**Page layout (single column, no lead-form sidebar — out of scope)**
+1. **Header bar:** `Aesthetic Training Hub` wordmark (indigo) left; short tagline
+   or a static "List your practice" pill (black, decorative) right. White, thin
+   bottom border.
+2. **Filter bar:** white rounded segmented bar mirroring the shot — a
+   **Specialism** `<select>` (small uppercase label above value) + a **Reset
+   filters** indigo link.
+3. **Title + count:** `Find an aesthetics trainer` (large bold), then
+   `Showing N trainers` (gray), updating live as filters change.
+4. **Location chips:** horizontal row of pill buttons — `All`, then each UK
+   location. Active chip = light indigo bg + indigo text (matches the shot's
+   location chips). This is the location filter.
+5. **Listing rows:** profile picture left, content right, divider between rows —
+   the shot's row style, not heavy boxed cards (premium is the exception, below).
+
+**Row content** (maps the shot's card): rounded portrait avatar (left) · name
+(bold) + tier badge pill beside it · location with indigo pin icon · specialism
+tags as light gray icon-chips (the shot's sqft/people/parking chip row).
+
 ## Premium standout
 
-Three reinforcing signals, no setting toggle:
+Premium rises out of the flat list, mirroring how the shot makes featured cards
+pop — no setting toggle:
 
-1. **Order:** premium sorted to the top of the grid.
-2. **Badge:** `★ Premium` pill on premium cards.
-3. **Card style:** premium gets a gold/amber accent border + subtle tinted
-   background. Standard cards are plain (neutral border, white/zinc background).
+1. **Order:** premium sorted to the top.
+2. **Elevation:** premium rows render as **bordered cards** with an amber/gold
+   left accent, a subtle gold-tinted background, and soft shadow — lifted off the
+   plain divider-separated standard rows below.
+3. **Badge:** gold `★ Premium` pill beside the name. Standard tier shows a muted
+   gray `Standard` pill (or none).
 
-Works in light and dark (Tailwind `dark:` variants).
+Works in light and dark (`dark:` variants).
 
-**Card content (all tiers):** profile picture, name, location, specialism tags,
-tier. Picture renders from `profile_picture`; if null or it fails to load, fall
-back to a neutral avatar showing the practitioner's initials. Plain `<img>`
-with an `onError` handler (client component) — avoids `next/image`
+**Avatar fallback:** picture renders from `profile_picture`; if null or it fails
+to load, fall back to a neutral avatar showing the practitioner's initials. Plain
+`<img>` with an `onError` handler (client component) — avoids `next/image`
 `remotePatterns` config for the placeholder host.
 
 ## Filtering
 
-- Two native `<select>` controls: **Specialism**, **Location**. Each starts at
-  "All".
-- Options derived from the loaded rows (unique, sorted). Specialism options come
-  from flattening every practitioner's `specialisms` array.
-- Filters combine with AND. A practitioner matches a specialism filter if the
-  selected value is in its `specialisms` array.
+- **Specialism:** native `<select>` in the filter bar, starts at "All". Options
+  = unique specialisms flattened from every practitioner's `specialisms` array,
+  sorted.
+- **Location:** chip row, starts at "All". Options = unique locations from the
+  rows, sorted.
+- Filters combine with **AND**. A practitioner matches the specialism filter if
+  the selected value is in its `specialisms` array.
 - Empty result → simple "No practitioners match" message.
 - Premium-first order preserved within filtered results.
 
